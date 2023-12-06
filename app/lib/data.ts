@@ -15,7 +15,16 @@ export async function fetchRevenue() {
   // This is equivalent to in fetch(..., {cache: 'no-store'}).
 
   try {
+    // Artificially delay a response for demo purposes.
+    // Don't do this in production :)
+
+    // console.log('Fetching revenue data...');
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     const data = await sql<Revenue>`SELECT * FROM revenue`;
+
+    // console.log('Data fetch completed after 3 seconds.');
+
     return data.rows;
   } catch (error) {
     console.error('Database Error:', error);
@@ -31,6 +40,7 @@ export async function fetchLatestInvoices() {
       JOIN customers ON invoices.customer_id = customers.id
       ORDER BY invoices.date DESC
       LIMIT 5`;
+    await new Promise((resolve) => setTimeout(resolve, 1500));
 
     const latestInvoices = data.rows.map((invoice) => ({
       ...invoice,
@@ -65,7 +75,8 @@ export async function fetchCardData() {
     const numberOfCustomers = Number(data[1].rows[0].count ?? '0');
     const totalPaidInvoices = formatCurrency(data[2].rows[0].paid ?? '0');
     const totalPendingInvoices = formatCurrency(data[2].rows[0].pending ?? '0');
-
+    // delay for demo purposes
+    await new Promise((resolve) => setTimeout(resolve, 2500));
     return {
       numberOfCustomers,
       numberOfInvoices,
